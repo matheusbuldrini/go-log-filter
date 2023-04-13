@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -9,7 +10,13 @@ import (
 )
 
 func main() {
-	f, err := os.Open("myapp.log")
+
+	path := flag.String("path", "myapp.log", "Path to the log to filter")
+	level := flag.String("level", "ERROR", "DEBUG/INFO/ERROR/CRITICAL")
+
+	flag.Parse()
+
+	f, err := os.Open(*path)
 
 	if err != nil {
 		log.Fatal(err)
@@ -25,7 +32,7 @@ func main() {
 			break
 		}
 
-		if strings.Contains(s, "ERROR") {
+		if strings.Contains(s, *level) {
 			fmt.Println(s)
 		}
 	}
